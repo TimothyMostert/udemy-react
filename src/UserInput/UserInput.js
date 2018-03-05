@@ -1,10 +1,15 @@
 import React from 'react';
-import App from './';
+import './UserInput.css';
 
 const UserInput = (props) => {
+
+  const styles = {
+    border: '2px solid red'
+  };
+
   return (
-    <div>
-      <input type="text" onChange={props.handle} value={this.value} />
+    <div >
+      <input style={styles} type="text" onChange={props.handle} value={props.driver} />
     </div>
   );
 }
