@@ -8,10 +8,11 @@ const CharComponent = (props) => {
         textAlign: 'center',
         margin: '16px',
         border: '1px solid black',
-        maxWidth: '20px'
+        maxWidth: '20px',
+        background: 'lightblue'
     }
 
-    return <div style={style} onClick={props.click}>{props.character}</div>  
+    return <div style={style} onClick={props.click}>{props.character}</div>
 }
 
 export default CharComponent;

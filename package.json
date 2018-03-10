@@ -6,6 +6,7 @@
     "eslint": "^4.18.1",
     "eslint-plugin-react": "^7.7.0",
     "jshint": "^2.9.5",
+    "radium": "^0.22.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.1.1"

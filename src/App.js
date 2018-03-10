@@ -85,26 +85,24 @@ class App extends Component {
     );
   }
 
-  render() {
+  personsListGenerator = (persons) => {
+    persons = (
+      <div>
+        {this.state.persons.map((person, index) => {
+          return <Person
+            key={person.id}
+            click={() => this.deletePersonHandler(index)}
+            name={person.name}
+            age={person.age}
+            changed={(event) => this.inputChangedHandler(event, person.id)}
+          />
+        })}
+      </div>
+    );
+    return persons;
+  }
 
-    let persons = null;
-
-    if (this.state.showPeople) {
-      persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return <Person
-              key={person.id}
-              click={() => this.deletePersonHandler(index)}
-              name={person.name}
-              age={person.age}
-              changed={(event) => this.inputChangedHandler(event, person.id)}
-            />
-          })}
-        </div>
-      );
-    }
-
+  charcterListGenerator = () => {
     let chars = this.state.stringContent.split('');
     let charComponentList = (
       <div>
@@ -112,24 +110,68 @@ class App extends Component {
           return <CharComponent
             character={char}
             click={() => this.deleteCharacterHandler(index)}
+            key={index}
           />
         })}
       </div>
     );
+    return charComponentList;
+  }
+
+  render() {
+
+    //styles
+    const styles = {
+      button: {
+        backgroundColor: 'green',
+        color: 'white',
+        font: 'inherit',
+        border: '1px solid blue',
+        padding: '8px',
+        cursor: 'pointer',
+        marginBottom: '1rem'
+      }
+    }
+
+    // Generate Persons List from state
+    let persons = null;
+    if (this.state.showPeople) {
+      persons = this.personsListGenerator(persons);
+      styles.button.backgroundColor = 'red';
+    }
+    // generate charComponents from input field
+    let charComponentList = this.charcterListGenerator();
+
+    // dynamic classes
+    let classes = [];
+    if (this.state.persons.length <= 2) {
+      classes.push('red');
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push('bold');
+    }
 
     return (
       <div className="App">
         <h1>Hi, I'm Tims React App</h1>
-        <p>This Works Great!</p>
-        <button
-          onClick={this.togglePeopleHandler} >
+        <p className={classes.join(' ')} >This Works Great!</p>
+        <button style={styles.button} onClick={this.togglePeopleHandler} >
           Toggle People
         </button>
         {persons}
         <br />
-        <input type="text" onChange={(event) => this.inputLengthHandler(event)} value={this.state.stringContent} />
-        <p>Current length: {this.state.stringLength}</p>
-        <ValidationComponent cutOff={this.state.cutOff} textLength={this.state.stringLength} />
+        <input
+          type="text"
+          onChange={(event) => this.inputLengthHandler(event)}
+          value={this.state.stringContent}
+        />
+        <p>
+          Current length: {this.state.stringLength}
+        </p>
+        <ValidationComponent
+          cutOff={this.state.cutOff}
+          textLength={this.state.stringLength}
+        />
         {charComponentList}
       </div>
     );
