@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import classes from './App.css';
 // import UserInput from './UserInput/UserInput';
 // import UserOutput from './UserOutput/UserOutput';
 import Person from './Person/Person';
@@ -95,6 +95,7 @@ class App extends Component {
             name={person.name}
             age={person.age}
             changed={(event) => this.inputChangedHandler(event, person.id)}
+            defaulttext={person.name}
           />
         })}
       </div>
@@ -120,42 +121,31 @@ class App extends Component {
 
   render() {
 
-    //styles
-    const styles = {
-      button: {
-        backgroundColor: 'green',
-        color: 'white',
-        font: 'inherit',
-        border: '1px solid blue',
-        padding: '8px',
-        cursor: 'pointer',
-        marginBottom: '1rem'
-      }
-    }
+    let btnClass = '';
 
     // Generate Persons List from state
     let persons = null;
     if (this.state.showPeople) {
       persons = this.personsListGenerator(persons);
-      styles.button.backgroundColor = 'red';
+      btnClass = classes.Red;
     }
     // generate charComponents from input field
     let charComponentList = this.charcterListGenerator();
 
     // dynamic classes
-    let classes = [];
+    let assignedClasses = [];
     if (this.state.persons.length <= 2) {
-      classes.push('red');
+      assignedClasses.push( classes.red );
     }
     if (this.state.persons.length <= 1) {
-      classes.push('bold');
+      assignedClasses.push( classes.bold);
     }
 
     return (
-      <div className="App">
+      <div className={classes.App}>
         <h1>Hi, I'm Tims React App</h1>
-        <p className={classes.join(' ')} >This Works Great!</p>
-        <button style={styles.button} onClick={this.togglePeopleHandler} >
+        <p className={assignedClasses.join(' ')} >This Works Great!</p>
+        <button className={btnClass} onClick={this.togglePeopleHandler} >
           Toggle People
         </button>
         {persons}
