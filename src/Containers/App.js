@@ -1,12 +1,39 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import classes from './App.css';
 // import UserInput from './UserInput/UserInput';
 // import UserOutput from './UserOutput/UserOutput';
-import Person from './Person/Person';
-import ValidationComponent from './ValidationComponent/ValidationComponent';
-import CharComponent from './CharComponent/CharComponent';
+import ValidationComponent from '../Components/ValidationComponent/ValidationComponent';
+import CharComponent from '../Components/CharComponent/CharComponent';
+import Persons from '../Components/Persons/Persons';
+import Cockpit from '../Components/Cockpit/Cockpit';
+import WithClass from '../HOC/WithClass';
 
-class App extends Component {
+class App extends PureComponent {
+  constructor(props)
+  {
+    super(props);
+    console.log('[App.js] Inside Constructor', props);
+  }
+
+  componentWillMount()
+  {
+    console.log('[App.js] inside componentWillMount()');
+  }
+
+  componentDidMount()
+  {
+    console.log('[App.js] inside componentDidMount');
+  }
+
+  componentWillUpdate(nextProps, nextState)
+  {
+    console.log('[UPDATE App.js] Inside componentWillUpdate', nextProps, nextState);
+  }
+
+  componentDidUpdate()
+  {
+    console.log('[UPDATE App.js] Inside componentDidUpdate');
+  }
 
   state = {
     persons:
@@ -85,24 +112,6 @@ class App extends Component {
     );
   }
 
-  personsListGenerator = (persons) => {
-    persons = (
-      <div>
-        {this.state.persons.map((person, index) => {
-          return <Person
-            key={person.id}
-            click={() => this.deletePersonHandler(index)}
-            name={person.name}
-            age={person.age}
-            changed={(event) => this.inputChangedHandler(event, person.id)}
-            defaulttext={person.name}
-          />
-        })}
-      </div>
-    );
-    return persons;
-  }
-
   charcterListGenerator = () => {
     let chars = this.state.stringContent.split('');
     let charComponentList = (
@@ -120,35 +129,31 @@ class App extends Component {
   }
 
   render() {
-
-    let btnClass = '';
-
+    console.log('[App.js] inside Render');
+    
     // Generate Persons List from state
     let persons = null;
     if (this.state.showPeople) {
-      persons = this.personsListGenerator(persons);
-      btnClass = classes.Red;
+        persons = <Persons 
+          persons = {this.state.persons}
+          clicked = {this.deletePersonHandler}
+          changed = {this.inputChangedHandler} />
     }
     // generate charComponents from input field
     let charComponentList = this.charcterListGenerator();
 
-    // dynamic classes
-    let assignedClasses = [];
-    if (this.state.persons.length <= 2) {
-      assignedClasses.push( classes.red );
-    }
-    if (this.state.persons.length <= 1) {
-      assignedClasses.push( classes.bold);
-    }
-
     return (
-      <div className={classes.App}>
-        <h1>Hi, I'm Tims React App</h1>
-        <p className={assignedClasses.join(' ')} >This Works Great!</p>
-        <button className={btnClass} onClick={this.togglePeopleHandler} >
-          Toggle People
-        </button>
+
+      <WithClass classes={classes.App}>
+        <button onClick={() => {this.setState({showPeople: true})}} >Show Persons</button>
+        <Cockpit 
+          persons = {this.state.persons}
+          clicked = {this.togglePeopleHandler}
+          showPeople = {this.state.showPeople} 
+        />
         {persons}
+
+
         <br />
         <input
           type="text"
@@ -163,7 +168,7 @@ class App extends Component {
           textLength={this.state.stringLength}
         />
         {charComponentList}
-      </div>
+      </WithClass>
     );
   }
 };
